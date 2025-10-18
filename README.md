@@ -123,6 +123,31 @@ The Quick Start example is based on the local clone setup. ForensicHub is a modu
 framework. You only need to use the built-in or custom Dataset, Transform, and Model components, register them, and then
 launch the pipeline using a YAML configuration file.
 
+## 🕸️ Run a Zero-Shot Forgery Inspection Web App
+
+If you already have pretrained checkpoints and simply want to expose them through a lightweight web page, you can use the
+included FastAPI demo. It serves an upload form that returns the model's manipulation probability and a localisation heatmap
+without any additional training.
+
+1. Install the extra dependencies (FastAPI and Uvicorn are listed in `requirements.txt`).
+2. Set the required environment variables:
+
+   ```bash
+   export FORHUB_MODEL="<RegisteredModelName>"        # e.g. "ConvNextSmall"
+   export FORHUB_CHECKPOINT="/path/to/checkpoint.pth"
+   export FORHUB_IMAGE_SIZE=512                       # Optional, defaults to 512
+   export FORHUB_THRESHOLD=0.5                        # Optional overlay intensity
+   ```
+
+3. Launch the server:
+
+   ```bash
+   uvicorn ForensicHub.applications.forgery_web_app:create_app --factory --host 0.0.0.0 --port 8000
+   ```
+
+Open `http://localhost:8000` in a browser, upload an image, and the page will display the predicted probability alongside a
+red heatmap highlighting suspicious regions whenever the model returns a mask.
+
 <details>
 <summary>Training on the DiffusionForensics dataset using Resnet for AIGC</summary>
 
