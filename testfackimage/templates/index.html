@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>كشف التلاعب بالصور</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>منصة كشف الصور المزيفة</h1>
+        <p>
+          قم برفع صورة للحصول على احتمالية التلاعب وإظهار مناطق التعديل التي اكتشفها
+          النموذج.
+        </p>
+      </header>
+
+      <form class="upload-form" method="post" enctype="multipart/form-data">
+        <label class="file-input">
+          اختر صورة
+          <input type="file" name="image" accept="image/*" required />
+        </label>
+        <button type="submit">تحليل الصورة</button>
+      </form>
+
+      {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+      {% endif %}
+
+      {% if probability is not none %}
+      <section class="results">
+        <h2>نتائج التحليل</h2>
+        <p class="probability">
+          <strong>احتمالية التلاعب:</strong>
+          {{ '%.2f'|format(probability * 100) }}%
+        </p>
+
+        <div class="image-grid">
+          {% if original_data %}
+          <div class="image-card">
+            <h3>الصورة الأصلية</h3>
+            <img src="data:image/png;base64,{{ original_data }}" alt="الصورة الأصلية" />
+          </div>
+          {% endif %}
+
+          {% if overlay_data %}
+          <div class="image-card">
+            <h3>مناطق التلاعب</h3>
+            <img
+              src="data:image/png;base64,{{ overlay_data }}"
+              alt="خريطة التلاعب"
+            />
+          </div>
+          {% endif %}
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </body>
+</html>

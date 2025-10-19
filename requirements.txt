@@ -31,3 +31,6 @@ torchvision
 tqdm
 ttach
 yacs
+fastapi
+Flask
+uvicorn
